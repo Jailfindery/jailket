@@ -46,7 +46,7 @@ class client_connection
 	int send(string mes);
 	string recv();
 	void close();
-	virtual ~client_connection();
+	virtual ~client_connection() { close(); }
 };
 
 }

@@ -69,7 +69,7 @@ void server_socket::listen()
 	return;
 }
 
-client_connection* server_socket::accept()
+client_connection server_socket::accept()
 {
 	sockaddr client;	/* Stores information about the client */
 	socklen_t client_length;
@@ -82,13 +82,7 @@ client_connection* server_socket::accept()
 	/* We need to create a client_address object to retain client info */
 	client_address MyClient(&client, client_length);
 
-	/* A temporary connection is created so this object does
-	 * not need to deal with it. This means that the programmer
-	 * must handle it, but in any way he/she wants (e.g. concurrently
-	 * or otherwise).
-	 */
-	client_connection* temp = new client_connection(client_fd, MyClient);
-	return temp;
+	return client_connection(client_fd, MyClient);
 }
 
 void server_socket::close()

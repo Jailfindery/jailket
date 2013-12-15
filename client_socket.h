@@ -46,7 +46,7 @@ class client_socket
 	addrinfo* server;
   public:
 	client_socket(server_address& s);
-	virtual ~client_socket();
+	virtual ~client_socket() { close(); }
 	void connect();
 	int send(string mes);
 	string recv();

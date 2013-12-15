@@ -54,8 +54,3 @@ void client_connection::close()
 	return;
 }
 
-client_connection::~client_connection()
-{
-	close();
-}
-

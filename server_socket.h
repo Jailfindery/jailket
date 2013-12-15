@@ -44,8 +44,9 @@ class server_socket
 	int listen_fd;
   public:
 	server_socket(inet_port service);
+    virtual ~server_socket() { close(); }
 	void listen();
-	client_connection* accept();
+	client_connection accept();
 	void close();
 };
 

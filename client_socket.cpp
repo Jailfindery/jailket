@@ -46,11 +46,6 @@ client_socket::client_socket(server_address& s)
 	}
 }
 
-client_socket::~client_socket()
-{
-	close();
-}
-
 void client_socket::connect()
 {
 	if(::connect(socket_fd, server->ai_addr, server->ai_addrlen) < 0)
