@@ -30,6 +30,7 @@
 #include "server_address.h"
 
 /* Exceptions:
+ * close_error      close()
  * connect_error	connect()
  * not_connected	send(), recv()
  * socket_error		client_socket(), set_server()

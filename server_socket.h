@@ -32,11 +32,12 @@
 namespace jailket {
 
 /* Exceptions:
- * getaddrinfo_error	server_socket()
- * socket_error			server_socket()
- * bind_error			server_socket()
- * listen_error			listen()
  * accept_error			accept()
+ * bind_error			server_socket()
+ * close_error          close()
+ * getaddrinfo_error	server_socket()
+ * listen_error			listen()
+ * socket_error			server_socket()
  */
 class server_socket
 {

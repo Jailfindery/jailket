@@ -87,7 +87,8 @@ client_connection server_socket::accept()
 
 void server_socket::close()
 {
-	::close(listen_fd);
+	if(::close(listen_fd) )
+        throw close_error("Unable to close server socket file descriptor");
 	return;
 }
 

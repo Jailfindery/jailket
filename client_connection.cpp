@@ -50,7 +50,8 @@ string client_connection::recv()
 
 void client_connection::close()
 {
-	::close(socket_fd);
+	if(::close(socket_fd) )
+        throw close_error("Unable to close connection to client");
 	return;
 }
 

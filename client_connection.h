@@ -32,6 +32,7 @@ namespace jailket {
 class server_socket;
 
 /* Exceptions:
+ * close_error      close()
  * not_connected	recv(), send()
  */
 class client_connection

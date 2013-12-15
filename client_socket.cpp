@@ -89,8 +89,10 @@ void client_socket::close()
 {
 	if(socket_fd > 0)	/* Ensures we don't double free something */
 	{
-		//freeaddrinfo(server);		/* FIXME: Comment will cause memory leaks */
-		::close(socket_fd);
+		//freeaddrinfo(server);     /* server is freed by server_address object */
+                                    /* - do not uncomment!                      */
+		if(::close(socket_fd) )
+            throw close_error("Unable to close client socket");
 	}
 	return;
 }

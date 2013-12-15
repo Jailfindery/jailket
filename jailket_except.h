@@ -43,6 +43,7 @@ class jailket_error;			/* General runtime error; not typically used */
 class jailket_invalid_argument;	/* Used to signal an invalid argument */
 class accept_error;				/* Error when using accept() */
 class bind_error;				/* Error when using bind() */
+class close_error;              /* Error when closing a file descriptor */
 class connect_error;			/* Error when using connect() */
 class getaddrinfo_error;		/* Error when using getaddrinfo() */
 class inet_port_error;			/* Error when creating an inet_port object */
@@ -86,6 +87,12 @@ class bind_error : public jailket_error
 {
   public:
 	bind_error(const string& d) : jailket_error(d) {}
+};
+
+class close_error : public jailket_error
+{
+  public:
+    close_error(const string& d) : jailket_error(d) {}
 };
 
 class connect_error : public jailket_error
