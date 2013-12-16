@@ -1,5 +1,5 @@
 JAILKET_OBJECTS= obj/client_connection.o obj/client_socket.o obj/inet_port.o \
-    obj/jailket_except.o obj/server_address.o obj/server_socket.o
+    obj/jailket_except.o obj/server_socket.o
 
 default: jailket
 
@@ -19,8 +19,6 @@ obj/inet_port.o: inet_port.cpp
 	g++ -c inet_port.cpp -o obj/inet_port.o -fPIC -std=c++11
 obj/jailket_except.o: jailket_except.cpp
 	g++ -c jailket_except.cpp -o obj/jailket_except.o -fPIC
-obj/server_address.o: server_address.cpp
-	g++ -c server_address.cpp -o obj/server_address.o -fPIC
 obj/server_socket.o: server_socket.cpp
 	g++ -c server_socket.cpp -o obj/server_socket.o -fPIC
 

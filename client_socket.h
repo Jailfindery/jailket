@@ -27,7 +27,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
-#include "server_address.h"
+#include "inet_port.h"
 
 /* Exceptions:
  * close_error      close()
@@ -43,12 +43,12 @@ namespace jailket {
 class client_socket
 {
   private:
-	addrinfo* server;
+	addrinfo* server_address;
     bool is_socket_open;
 	int socket_fd;
   public:
-	client_socket(server_address& s);
-	virtual ~client_socket() { close(); }
+	client_socket(std::string node, inet_port port);
+	virtual ~client_socket();
 	void connect();
 	int send(string mes);
 	string recv();

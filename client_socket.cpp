@@ -22,6 +22,7 @@
 #include <string>
 
 #include <cstring>
+
 #include <netdb.h>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -32,21 +33,47 @@
 
 using namespace jailket;
 
-client_socket::client_socket(server_address& s)
+client_socket::client_socket(string node, inet_port port)
 {
 	socket_fd = -1;
 
-	server = s.get_address_info();
-	socket_fd = socket(server->ai_family, server->ai_socktype,
-	                   server->ai_protocol);
+    addrinfo filter;    /* Used to limit generated addresses */
+    memset(&filter, 0, sizeof(addrinfo) );  /* Clears garbage from filter */
+
+    filter.ai_family = AF_UNSPEC;   /* IP-version agnostic */
+    filter.ai_socktype = port.get_protocol();
+    if(getaddrinfo(node.c_str(), port.get_port(),
+                   &filter, &server_address) < 0)
+        throw getaddrinfo_error("Failed to get server info");
+
+	socket_fd = socket(server_address->ai_family, server_address->ai_socktype,
+	                   server_address->ai_protocol);
 	if(socket_fd < 0)
 		throw socket_error("Unable to create socket");
     is_socket_open = true;
 }
 
+/* Closes the actually socket and frees the server_address member. If either
+ * task fails, an exception is thrown to the calling scope/
+ */
+client_socket::~client_socket()
+{
+    try
+    {
+        close();
+        freeaddrinfo(server_address);
+    }
+    catch(...)
+    {
+        throw;
+    }
+}
+
+
 void client_socket::connect()
 {
-	if(::connect(socket_fd, server->ai_addr, server->ai_addrlen) < 0)
+	if(::connect(socket_fd, server_address->ai_addr,
+                 server_address->ai_addrlen) < 0)
 		throw connect_error(string("Unable to connect to server") );
 }
 
