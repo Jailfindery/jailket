@@ -43,15 +43,15 @@ namespace jailket {
 class client_socket
 {
   private:
-	int socket_fd;
 	addrinfo* server;
+    bool is_socket_open;
+	int socket_fd;
   public:
 	client_socket(server_address& s);
 	virtual ~client_socket() { close(); }
 	void connect();
 	int send(string mes);
 	string recv();
-	void set_server(server_address& s);
 	void close();
 };
 

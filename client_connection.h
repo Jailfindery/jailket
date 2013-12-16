@@ -40,9 +40,11 @@ class client_connection
   friend server_socket;
 
   private:
-	client_connection(int fd, client_address c) : socket_fd(fd), address(c) {}
-	int socket_fd;
+    bool is_socket_open;    /* Tracks state of int socket_fd member */
 	client_address address;
+	client_connection(int fd, client_address c)
+        : socket_fd(fd), address(c), is_socket_open(true) {}
+	int socket_fd;
   public:
 	int send(string mes);
 	string recv();

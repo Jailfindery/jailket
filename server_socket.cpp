@@ -51,6 +51,7 @@ server_socket::server_socket(inet_port service)
 	                   address->ai_protocol);
 	if(listen_fd < 0)
 		throw socket_error("Unable to create socket for server");
+    is_socket_open = true;
 
 	int yes = 1;
 	if(setsockopt(listen_fd, SOL_SOCKET,		/* Ensure the socket is */
@@ -87,8 +88,9 @@ client_connection server_socket::accept()
 
 void server_socket::close()
 {
-	if(::close(listen_fd) )
-        throw close_error("Unable to close server socket file descriptor");
-	return;
+    if(is_socket_open)
+        if(::close(listen_fd) )
+            throw close_error("Unable to close server socket file descriptor");
+    is_socket_open = false;
 }
 

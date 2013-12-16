@@ -30,39 +30,36 @@
 #include "client_socket.h"
 #include "jailket_except.h"
 
-using namespace std;
 using namespace jailket;
 
 client_socket::client_socket(server_address& s)
 {
-	socket_fd = 0;	/* Clear out any garbage */
-	try
-	{
-		set_server(s);
-	}
-	catch(...)
-	{
-		throw;	/* Rethrows whatever exception */
-	}
+	socket_fd = -1;
+
+	server = s.get_address_info();
+	socket_fd = socket(server->ai_family, server->ai_socktype,
+	                   server->ai_protocol);
+	if(socket_fd < 0)
+		throw socket_error("Unable to create socket");
+    is_socket_open = true;
 }
 
 void client_socket::connect()
 {
 	if(::connect(socket_fd, server->ai_addr, server->ai_addrlen) < 0)
 		throw connect_error(string("Unable to connect to server") );
-	return;
 }
 
 int client_socket::send(string d)
 {
-	if(socket_fd <= 0)	/* Checks that the socket is set up */
+	if(socket_fd < 0)	/* Checks that the socket is set up */
 		throw not_connected("Socket is not connected to a server");
 	return ::send(socket_fd, d.c_str(), d.size(), 0);
 }
 
 string client_socket::recv()
 {
-	if(socket_fd <= 0)	/* Checks that the socket is set up */
+	if(socket_fd < 0)	/* Checks that the socket is set up */
 		throw not_connected("Socket is not connected to a server");
 	char buf[1024];
 	memset(&buf, 0, 1024);		/* Clear buf of any garbage */
@@ -72,28 +69,12 @@ string client_socket::recv()
 	return data;
 }
 
-void client_socket::set_server(server_address& s)
-{
-	close();	/* Clear previous socket connections */
-	socket_fd = 0;
-
-	server = s.get_address_info();
-	socket_fd = socket(server->ai_family, server->ai_socktype,
-	                   server->ai_protocol);
-	if(socket_fd < 0)
-		throw socket_error("Unable to create socket");
-	return;
-}
-
 void client_socket::close()
 {
-	if(socket_fd > 0)	/* Ensures we don't double free something */
-	{
-		//freeaddrinfo(server);     /* server is freed by server_address object */
-                                    /* - do not uncomment!                      */
+    if(is_socket_open)
 		if(::close(socket_fd) )
             throw close_error("Unable to close client socket");
-	}
-	return;
+    socket_fd = -1;
+    is_socket_open = false;
 }
 

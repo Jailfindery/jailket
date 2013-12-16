@@ -31,14 +31,14 @@ using namespace jailket;
 
 int client_connection::send(string mes)
 {
-	if(socket_fd <= 0)	/* Ensure that we really are connected to a client */
+	if(socket_fd < 0)	/* Ensure that we really are connected to a client */
 		throw not_connected("Socket is not connected to the client");
 	return ::send(socket_fd, mes.c_str(), mes.size(), 0);
 }
 
 string client_connection::recv()
 {
-	if(socket_fd <= 0)
+	if(socket_fd < 0)
 		throw not_connected("Socket is not connected to the client");
 	char buf[1024];
 	memset(&buf, 0, 1024);	/* Clear buf of garbage */
@@ -50,8 +50,9 @@ string client_connection::recv()
 
 void client_connection::close()
 {
-	if(::close(socket_fd) )
-        throw close_error("Unable to close connection to client");
-	return;
+    if(is_socket_open)
+	    if(::close(socket_fd) )
+            throw close_error("Unable to close connection to client");
+    is_socket_open = false;
 }
 

@@ -42,6 +42,7 @@ namespace jailket {
 class server_socket
 {
   private:
+    bool is_socket_open;
 	int listen_fd;
   public:
 	server_socket(inet_port service);
