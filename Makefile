@@ -1,20 +1,27 @@
-JAILKET_OBJECTS= obj/client_connection.o obj/client_socket.o obj/inet_port.o \
+JAILKET_OBJECTS= obj/client_connection.o obj/server_connection.o obj/inet_port.o \
     obj/jailket_except.o obj/server_socket.o
 
 default: jailket
 
 # Meta builds
 jailket: bin/jailket.so
+test: bin/client_test bin/server_test
 
 # Shared objects
 bin/jailket.so: $(JAILKET_OBJECTS)
 	g++ $(JAILKET_OBJECTS) -o bin/libjailket.so -shared
 
+# Binaries
+bin/client_test: $(JAILKET_OBJECTS) client_test.cpp
+	g++ client_test.cpp $(JAILKET_OBJECTS) -o bin/client_test
+bin/server_test: $(JAILKET_OBJECTS) server_test.cpp
+	g++ server_test.cpp $(JAILKET_OBJECTS) -o bin/server_test
+
 # Objects
 obj/client_connection.o: client_connection.cpp
 	g++ -c client_connection.cpp -o obj/client_connection.o -fPIC
-obj/client_socket.o: client_socket.cpp
-	g++ -c client_socket.cpp -o obj/client_socket.o -fPIC
+obj/server_connection.o: server_connection.cpp
+	g++ -c server_connection.cpp -o obj/server_connection.o -fPIC
 obj/inet_port.o: inet_port.cpp
 	g++ -c inet_port.cpp -o obj/inet_port.o -fPIC -std=c++11
 obj/jailket_except.o: jailket_except.cpp
@@ -24,8 +31,8 @@ obj/server_socket.o: server_socket.cpp
 
 # Clean
 clean:
-	-rm -f obj/*.o
-	-rm -f bin/*.so
+	-rm -f obj/*
+	-rm -f bin/*
 
 # Installations - requires root privledges
 install: jailket
