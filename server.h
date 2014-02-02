@@ -1,6 +1,6 @@
 /*
  *
- * Server socket class definition for garden.
+ * Server class definition for garden.
  * Copyright (C) 2013 Joshua Schell (joshua.g.schell@gmail.com)
  *
  * garden is free software: you can redistribute it and/or modify
@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef SERVER_SOCKET_H_INCLUDED
-#define SERVER_SOCKET_H_INCLUDED
+#ifndef SERVER_H_INCLUDED
+#define SERVER_H_INCLUDED
 
 #include "client_connection.h"
 #include "inet_port.h"
@@ -33,20 +33,20 @@ namespace jailket {
 
 /* Exceptions:
  * accept_error			accept()
- * bind_error			server_socket()
+ * bind_error			server()
  * close_error          close()
- * getaddrinfo_error	server_socket()
+ * getaddrinfo_error	server()
  * listen_error			listen()
- * socket_error			server_socket()
+ * socket_error			server()
  */
-class server_socket
+class server
 {
   private:
     bool is_socket_open;
 	int listen_fd;
   public:
-	server_socket(inet_port service);
-    virtual ~server_socket() { close(); }
+	server(inet_port service);
+    virtual ~server() { close(); }
 	void listen();
 	client_connection accept();
 	void close();
@@ -54,5 +54,5 @@ class server_socket
 
 }
 
-#endif /* SERVER_SOCKET_H_INCLUDED */
+#endif /* SERVER_H_INCLUDED */
 

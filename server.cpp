@@ -1,6 +1,6 @@
 /*
  *
- * Server socket class implementation for garden.
+ * Server class implementation for garden.
  * Copyright (C) 2013 Joshua Schell (joshua.g.schell@gmail.com)
  *
  * garden is free software: you can redistribute it and/or modify
@@ -27,12 +27,12 @@
 #include "client_address.h"
 #include "client_connection.h"
 #include "jailket_except.h"
-#include "server_socket.h"
+#include "server.h"
 
 using namespace std;
 using namespace jailket;
 
-server_socket::server_socket(inet_port service)
+server::server(inet_port service)
 {
 	addrinfo filter;    /* Used to limit generated addresses */
 	addrinfo* address;	/* Stores server address */
@@ -63,14 +63,14 @@ server_socket::server_socket(inet_port service)
 		throw bind_error("Unable to bind to the socket");
 }
 
-void server_socket::listen()
+void server::listen()
 {
 	if(::listen(listen_fd, QUEUE_LENGTH) < 0)
 		throw listen_error("Listen error");
 	return;
 }
 
-client_connection server_socket::accept()
+client_connection server::accept()
 {
 	sockaddr client;	/* Stores information about the client */
 	socklen_t client_length;
@@ -86,7 +86,7 @@ client_connection server_socket::accept()
 	return client_connection(client_fd, MyClient);
 }
 
-void server_socket::close()
+void server::close()
 {
     if(is_socket_open)
         if(::close(listen_fd) )

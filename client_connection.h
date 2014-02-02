@@ -29,7 +29,7 @@ using namespace std;
 
 namespace jailket {
 
-class server_socket;
+class server;
 
 /* Exceptions:
  * close_error      close()
@@ -37,7 +37,7 @@ class server_socket;
  */
 class client_connection
 {
-  friend server_socket;
+  friend server;
 
   private:
     bool is_socket_open;    /* Tracks state of int socket_fd member */
