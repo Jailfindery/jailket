@@ -33,6 +33,7 @@
 
 using namespace jailket;
 
+/* After constructor is run, the connection to the server is active. */
 server_connection::server_connection(string node, inet_port port)
 {
 	socket_fd = -1;
@@ -51,16 +52,20 @@ server_connection::server_connection(string node, inet_port port)
 	if(socket_fd < 0)
 		throw socket_error("Unable to create socket");
     is_socket_open = true;
+
+    connect();
 }
 
 /* Closes the actually socket and frees the server_address member. If either
  * task fails, an exception is thrown to the calling scope/
+ *
+ * TODO: Do not throw from destructor!
  */
 server_connection::~server_connection()
 {
     try
     {
-        close();
+        disconnect();
         freeaddrinfo(server_address);
     }
     catch(...)
@@ -96,7 +101,7 @@ string server_connection::recv()
 	return data;
 }
 
-void server_connection::close()
+void server_connection::disconnect()
 {
     if(is_socket_open)
 		if(::close(socket_fd) )

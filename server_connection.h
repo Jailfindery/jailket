@@ -52,7 +52,7 @@ class server_connection
 	void connect();
 	int send(string mes);
 	string recv();
-	void close();
+	void disconnect();
 };
 
 }
