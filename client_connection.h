@@ -48,8 +48,8 @@ class client_connection
   public:
 	int send(string mes);
 	string recv();
-	void close();
-	virtual ~client_connection() { close(); }
+	void disconnect();
+	virtual ~client_connection();
 };
 
 }

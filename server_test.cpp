@@ -16,7 +16,7 @@ int main()
     client_connection c = s.accept();
     string mesg = c.recv();
     c.send("ACK");
-    c.close();
+    c.disconnect();
 
     cout << mesg << endl;
 }

@@ -34,7 +34,7 @@ namespace jailket {
 /* Exceptions:
  * accept_error			accept()
  * bind_error			server()
- * close_error          close()
+ * close_error          disconnect()
  * getaddrinfo_error	server()
  * listen_error			listen()
  * socket_error			server()
@@ -46,10 +46,10 @@ class server
 	int listen_fd;
   public:
 	server(inet_port service);
-    virtual ~server() { close(); }
+    virtual ~server();
 	void listen();
 	client_connection accept();
-	void close();
+	void disconnect();
 };
 
 }

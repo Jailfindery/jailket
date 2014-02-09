@@ -57,9 +57,7 @@ server_connection::server_connection(string node, inet_port port)
 }
 
 /* Closes the actually socket and frees the server_address member. If either
- * task fails, an exception is thrown to the calling scope/
- *
- * TODO: Do not throw from destructor!
+ * task fails, the exceptions are swallowed.
  */
 server_connection::~server_connection()
 {
@@ -68,10 +66,7 @@ server_connection::~server_connection()
         disconnect();
         freeaddrinfo(server_address);
     }
-    catch(...)
-    {
-        throw;
-    }
+    catch(...) { /* Shallow exceptions */ }
 }
 
 
@@ -105,7 +100,7 @@ void server_connection::disconnect()
 {
     if(is_socket_open)
 		if(::close(socket_fd) )
-            throw close_error("Unable to close client socket");
+            throw disconnect_error("Unable to close client socket");
     socket_fd = -1;
     is_socket_open = false;
 }

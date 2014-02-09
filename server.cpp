@@ -63,6 +63,20 @@ server::server(inet_port service)
 		throw bind_error("Unable to bind to the socket");
 }
 
+/* Calls diconnect() to close open file descriptors and swallows any
+ * exceptions. Hence, if one wants to catch exceptions, call disconnect()
+ * manually.
+ */
+server::~server()
+{
+    try
+    {
+        disconnect();
+    }
+    catch(...) { /* Swallow exception */ }
+}
+
+
 void server::listen()
 {
 	if(::listen(listen_fd, QUEUE_LENGTH) < 0)
@@ -86,11 +100,11 @@ client_connection server::accept()
 	return client_connection(client_fd, MyClient);
 }
 
-void server::close()
+void server::disconnect()
 {
     if(is_socket_open)
         if(::close(listen_fd) )
-            throw close_error("Unable to close server socket file descriptor");
+            throw disconnect_error("Unable to close server");
     is_socket_open = false;
 }
 

@@ -29,6 +29,16 @@
 using namespace std;
 using namespace jailket;
 
+/* Closes the connection, swallowing any exceptions */
+client_connection::~client_connection()
+{
+    try
+    {
+        disconnect();
+    }
+    catch(...) { /* Swallow execption */ }
+}
+
 int client_connection::send(string mes)
 {
 	if(socket_fd < 0)	/* Ensure that we really are connected to a client */
@@ -48,11 +58,11 @@ string client_connection::recv()
 	return data;
 }
 
-void client_connection::close()
+void client_connection::disconnect()
 {
     if(is_socket_open)
 	    if(::close(socket_fd) )
-            throw close_error("Unable to close connection to client");
+            throw disconnect_error("Unable to disconnect from client");
     is_socket_open = false;
 }
 
