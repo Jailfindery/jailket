@@ -1,9 +1,6 @@
 #include <iostream>
 
-#include "client_connection.h"
-#include "inet_port.h"
-#include "jailket_except.h"
-#include "server.h"
+#include "jailket.h"
 
 using namespace std;
 using namespace jailket;
@@ -22,6 +19,7 @@ int main()
         c.disconnect();
 
         cout << mesg << endl;
+        s.disconnect();
     }
     catch(jailket_invalid_argument& e)
     {

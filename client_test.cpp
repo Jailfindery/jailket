@@ -1,8 +1,6 @@
 #include <iostream>
 
-#include "inet_port.h"
-#include "jailket_except.h"
-#include "server_connection.h"
+#include "jailket.h"
 
 using namespace std;
 using namespace jailket;
