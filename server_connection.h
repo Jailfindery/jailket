@@ -57,5 +57,12 @@ class server_connection
 
 }
 
+// Put-to operators for send()
+void operator<< (jailket::server_connection&, string&); 
+void operator<< (jailket::server_connection&, const char*);
+
+// Get-from operators for recv()
+void operator>> (jailket::server_connection&, string&);
+
 #endif /* CLIENT_H_INCLUDED */
 

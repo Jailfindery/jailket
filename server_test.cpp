@@ -14,8 +14,10 @@ int main()
 
         s.listen();
         client_connection c = s.accept();
-        string mesg = c.recv();
-        c.send("ACK");
+
+        string mesg;
+        c >> mesg;
+        c << "ACK";
         c.disconnect();
 
         cout << mesg << endl;

@@ -66,3 +66,39 @@ void client_connection::disconnect()
     is_socket_open = false;
 }
 
+/* Put-to operator for client_connection::send(). Throws the same exceptions as
+ * client_connection::send().
+ */
+void operator<< (client_connection& cc, string& str)
+{
+    try
+    {
+        cc.send(str);
+    }
+    catch(...) { throw; } // Rethrows exceptions
+}
+
+/* C-string overload for the put-to operator for client_connection::send().
+ * Throws the same exceptions as client_connection::send().
+ */
+void operator<< (jailket::client_connection& cc, const char* str)
+{
+    try
+    {
+        cc.send(string(str) );
+    }
+    catch(...) { throw; } // Rethrow exceptions
+}
+
+/* Get-from opreator for client_connection::recv(). Throws the same exceptions
+ * as client_connection::recv().
+ */
+void operator>> (client_connection& cc, string& str)
+{
+    try
+    {
+        str = cc.recv();
+    }
+    catch(...) { throw; } // Rethrows exceptions
+}
+

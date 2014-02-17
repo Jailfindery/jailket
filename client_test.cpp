@@ -12,8 +12,10 @@ int main()
         inet_port p("tcp", 8080);
         server_connection s("127.0.0.1", p);
 
-        s.send("Hello, world!");
-        string reply = s.recv();
+        s << "Hello, world!";
+:xa
+        string reply;
+        s >> reply;
         cout << reply << endl;
 
         s.disconnect();

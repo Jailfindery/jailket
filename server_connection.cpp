@@ -105,3 +105,39 @@ void server_connection::disconnect()
     is_socket_open = false;
 }
 
+/* Put-to operator for server_connection::send(). Exceptions thrown are the same
+ * as server_connection::send().
+ */
+void operator<< (jailket::server_connection& sc, string& str)
+{
+    try
+    {
+        sc.send(str);
+    }
+    catch(...) { throw; } // Rethrows exceptions
+}
+
+/* C-string overload of the put-to operator for server_connection::send().
+ * Exceptions thrown are the same as server_connection::send().
+ */
+void operator<< (jailket::server_connection& sc, const char* str)
+{
+    try
+    {
+        sc.send(string(str) );
+    }
+    catch(...) { throw; } // Rethrow exceptions
+}
+
+/* Get-from operator for server_connection::recv(). Exceptions throw are the
+ * same as server_connection::recv().
+ */
+void operator>> (jailket::server_connection& sc, string& str)
+{
+    try
+    {
+        str = sc.recv();
+    }
+    catch(...) { throw; } // Rethrows exceptions
+}
+
